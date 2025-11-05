@@ -1,8 +1,12 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkAlert from 'remark-github-blockquote-alert';
 
 // https://astro.build/config
 export default defineConfig({
+  markdown: {
+    remarkPlugins: [remarkAlert],
+  },
   integrations: [
     starlight({
       title: 'Indi Website',
@@ -22,6 +26,7 @@ export default defineConfig({
       components: {
         PageSidebar: './src/components/StarlightRightSidebar.astro',
       },
+      customCss: ['./src/styles/alerts.css'],
     }),
   ],
 });

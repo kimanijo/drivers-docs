@@ -160,7 +160,6 @@ for (const driver of allDrivers) {
         <a href={driverPath} class="driver-box">
           <img src={driver.data.thumbnail || `/images/drivers/${driver.data.category}/${driver.data.title}.png`} alt={`${driver.data.title} thumbnail`} class="driver-thumbnail" />
           <h2>{driver.data.title}</h2>
-          <p>{driver.data.description || 'No description available.'}</p>
         </a>
       );
     })}
@@ -170,7 +169,7 @@ for (const driver of allDrivers) {
 <style>
   .driver-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
   }
@@ -178,7 +177,7 @@ for (const driver of allDrivers) {
   .driver-box {
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.75rem;
-    padding: 1.5rem;
+    padding: 0.5rem;
     background-color: var(--sl-color-gray-6);
     display: flex;
     flex-direction: column;
@@ -211,8 +210,8 @@ for (const driver of allDrivers) {
   }
 
   .driver-thumbnail {
-    width: 96px;
-    height: 96px;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
     margin-bottom: 0.5rem;
   }

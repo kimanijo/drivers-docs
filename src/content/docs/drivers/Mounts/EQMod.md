@@ -23,7 +23,8 @@ This INDI driver interacts with a mount controller using the Skywatcher Protocol
 
 ## Connectivity
 
-> <font color="orange">To ensure proper mount operation and pointing accuracy, connect to the mount using either the Synscan App OR the INDI driver – never both simultaneously. For initial alignment, first perform alignment using the Synscan App, then fully disconnect the Synscan App before connecting and controlling the mount via the INDI driver. Running both control systems concurrently will compromise the pointing system and may result in inaccurate GOTO operations.</font>
+> [!WARNING]
+> To ensure proper mount operation and pointing accuracy, connect to the mount using either the Synscan App OR the INDI driver – never both simultaneously. For initial alignment, first perform alignment using the Synscan App, then fully disconnect the Synscan App before connecting and controlling the mount via the INDI driver. Running both control systems concurrently will compromise the pointing system and may result in inaccurate GOTO operations.
 
 `The device running the EQMod driver (StellarMate/PC) should be connected to the mount WiFi HotSpot. There is no need to use the Synscan App. In the Connection tab, select Ethernet.`
 

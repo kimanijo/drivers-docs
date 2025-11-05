@@ -6,24 +6,6 @@ const allDrivers = await getCollection('docs');
 
 const uniqueCategories = [...new Set(allDrivers.map(driver => driver.data.category || 'Uncategorized'))];
 
-const categoryDescriptions = {
-  'General': {
-    description: 'General drivers for various purposes.',
-    thumbnail: '/images/category-general.png'
-  },
-  'Network': {
-    description: 'Drivers for network connectivity.',
-    thumbnail: '/images/category-network.png'
-  },
-  'Mounts': {
-    description: 'Mount drivers.',
-    thumbnail: '/images/categories/mount.webp'
-  },
-  'Uncategorized': {
-    description: 'Drivers that have not been assigned a specific category.',
-    thumbnail: '/images/category-uncategorized.png'
-  },
-};
 ---
 
 <StarlightPage frontmatter={{
@@ -33,9 +15,8 @@ const categoryDescriptions = {
   <div class="category-grid">
     {uniqueCategories.map(category => (
       <a href={`/drivers/${category.toLowerCase()}`} class="category-box">
-        <img src={categoryDescriptions[category]?.thumbnail || '/images/placeholder.png'} alt={`${category} category thumbnail`} class="category-thumbnail" />
+        <img src={`/images/categories/${category.toLowerCase()}.webp`} alt={`${category} category thumbnail`} class="category-thumbnail" />
         <h2>{category}</h2>
-        <p>{categoryDescriptions[category]?.description || 'No description available.'}</p>
       </a>
     ))}
   </div>
@@ -44,7 +25,7 @@ const categoryDescriptions = {
 <style>
   .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
   }
@@ -52,7 +33,7 @@ const categoryDescriptions = {
   .category-box {
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.75rem;
-    padding: 1.5rem;
+    padding: 0.5rem;
     background-color: var(--sl-color-gray-6);
     display: flex;
     flex-direction: column;
@@ -71,8 +52,8 @@ const categoryDescriptions = {
   }
 
   .category-thumbnail {
-    width: 64px;
-    height: 64px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
     margin-bottom: 0.5rem;
   }
