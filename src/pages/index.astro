@@ -1,10 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { slugify } from '../utils/slugify';
 
 const allDrivers = await getCollection('docs');
+allDrivers.forEach(driver => console.log('[index.astro] Driver ID:', driver.id, 'Category:', driver.data.category));
 
-const uniqueCategories = [...new Set(allDrivers.map(driver => driver.data.category || 'Uncategorized'))];
+const uniqueCategories = [...new Set(allDrivers.map(driver => slugify(driver.data.category || 'Uncategorized')))];
 
 ---
 
@@ -14,8 +16,8 @@ const uniqueCategories = [...new Set(allDrivers.map(driver => driver.data.catego
 }}>
   <div class="category-grid">
     {uniqueCategories.map(category => (
-      <a href={`/drivers/${category.toLowerCase()}`} class="category-box">
-        <img src={`/images/categories/${category.toLowerCase()}.webp`} alt={`${category} category thumbnail`} class="category-thumbnail" />
+      <a href={`/drivers/${category}`} class="category-box">
+        <img src={`/images/categories/${category}.webp`} alt={`${category} category thumbnail`} class="category-thumbnail" />
         <h2>{category}</h2>
       </a>
     ))}

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { existsSync, readFileSync, readdirSync } from 'node:fs'; // Added readdirSync
 import TableOfContents from '@astrojs/starlight/components/TableOfContents.astro';
+import { slugify } from '../utils/slugify';
 
 const currentPath = Astro.url.pathname;
 let driverInfo = {};
@@ -18,8 +19,9 @@ if (currentPath.startsWith('/drivers/')) {
   driverId = currentPath.substring('/drivers/'.length).replace(/\/$/, '');
   
   const driverIdParts = driverId.split('/');
-  const driverCategorySlug = driverIdParts[0]; // e.g., 'mounts'
-  const driverSlug = driverIdParts[1]; // e.g., 'eqmod'
+  const driverCategorySlug = slugify(driverIdParts[0]); // e.g., 'mounts'
+  const driverManufacturerSlug = slugify(driverIdParts[1]); // e.g., 'sky-watcher'
+  const driverSlug = slugify(driverIdParts[2]); // e.g., 'eqmod'
 
   // Find the actual cased directory name for the category
   const baseContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers`);
@@ -28,22 +30,40 @@ if (currentPath.startsWith('/drivers/')) {
   if (existsSync(baseContentDirPath)) {
     const categoryDirs = readdirSync(baseContentDirPath, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
+      .map(dirent => slugify(dirent.name));
 
-    const foundCategoryDir = categoryDirs.find(dir => dir.toLowerCase() === driverCategorySlug);
+    const foundCategoryDir = categoryDirs.find(dir => dir === driverCategorySlug);
     if (foundCategoryDir) {
       actualCategoryDirName = foundCategoryDir;
     } else {
-      // console.warn(`StarlightRightSidebar: Actual category directory not found for slug: ${driverCategorySlug}`); // Removed debug log
+      console.warn(`StarlightRightSidebar: Actual category directory not found for slug: ${driverCategorySlug}`);
     }
   }
 
-  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  // Find the actual cased directory name for the manufacturer
+  const categoryContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  let actualManufacturerDirName = driverManufacturerSlug;
+
+  if (existsSync(categoryContentDirPath)) {
+    const manufacturerDirs = readdirSync(categoryContentDirPath, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => slugify(dirent.name));
+
+    const foundManufacturerDir = manufacturerDirs.find(dir => dir === driverManufacturerSlug);
+    if (foundManufacturerDir) {
+      actualManufacturerDirName = foundManufacturerDir;
+    } else {
+      console.warn(`StarlightRightSidebar: Actual manufacturer directory not found for slug: ${driverManufacturerSlug}`);
+    }
+  }
+
+  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}/${actualManufacturerDirName}`);
   
   if (existsSync(contentDirPath)) {
     try {
       const filesInDir = readdirSync(contentDirPath);
-      const yamlFile = filesInDir.find(file => file.toLowerCase() === `${driverSlug}.yaml`);
+      const yamlFileName = `${driverSlug}.yaml`;
+      const yamlFile = filesInDir.find(file => slugify(file) === slugify(yamlFileName));
 
       if (yamlFile) {
         yamlPath = path.resolve(contentDirPath, yamlFile);

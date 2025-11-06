@@ -5,27 +5,32 @@ import yaml from 'js-yaml';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url'; // Added fileURLToPath
+import { slugify } from '../../utils/slugify';
 
 export async function getStaticPaths() {
   const allDrivers = await getCollection('docs');
-  const uniqueCategories = [...new Set(allDrivers.map(driver => driver.data.category || 'Uncategorized'))];
+  const uniqueCategories = [...new Set(allDrivers.map(driver => slugify(driver.data.category || 'Uncategorized')))];
 
   return uniqueCategories.map(category => ({
-    params: { category: category.toLowerCase() },
+    params: { category: category },
     props: { categoryName: category },
   }));
 }
 
+const { category: rawCategory } = Astro.params;
+const category = slugify(rawCategory);
 const { categoryName } = Astro.props;
+
 const allDrivers = await getCollection('docs');
-const driversInCategory = allDrivers.filter(driver => (driver.data.category || 'Uncategorized').toLowerCase() === categoryName.toLowerCase());
-// console.log(`Drivers in category "${categoryName}":`, driversInCategory.map(d => d.id)); // Removed debug log
+const driversInCategory = allDrivers.filter(driver => slugify(driver.data.category || 'Uncategorized') === category);
 
 const uniqueManufacturers = new Set();
 for (const driver of driversInCategory) {
-  const driverId = driver.id; // e.g., drivers/mounts/eqmod
-  const driverSlug = driverId.split('/').pop(); // e.g., eqmod
-  const driverCategorySlug = driverId.split('/')[1]; // e.g., mounts
+  const driverId = driver.id; // e.g., drivers/mounts/skywatcher/eqmod
+  const driverParts = driverId.split('/');
+  const driverCategorySlug = slugify(driverParts[1]); // e.g., mounts
+  const driverManufacturerSlug = slugify(driverParts[2]); // e.g., skywatcher
+  const driverSlug = slugify(driverParts.pop()); // e.g., eqmod
 
   // Find the actual cased directory name for the category
   const baseContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers`);
@@ -34,22 +39,40 @@ for (const driver of driversInCategory) {
   if (existsSync(baseContentDirPath)) {
     const categoryDirs = readdirSync(baseContentDirPath, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
+      .map(dirent => slugify(dirent.name));
 
-    const foundCategoryDir = categoryDirs.find(dir => dir.toLowerCase() === driverCategorySlug);
+    const foundCategoryDir = categoryDirs.find(dir => dir === driverCategorySlug);
     if (foundCategoryDir) {
       actualCategoryDirName = foundCategoryDir;
     } else {
-      // console.warn(`Actual category directory not found for slug: ${driverCategorySlug}`); // Removed debug log
+      console.warn(`Actual category directory not found for slug: ${driverCategorySlug}`);
     }
   }
 
-  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  // Find the actual cased directory name for the manufacturer
+  const categoryContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  let actualManufacturerDirName = driverManufacturerSlug;
+
+  if (existsSync(categoryContentDirPath)) {
+    const manufacturerDirs = readdirSync(categoryContentDirPath, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => slugify(dirent.name));
+
+    const foundManufacturerDir = manufacturerDirs.find(dir => dir === driverManufacturerSlug);
+    if (foundManufacturerDir) {
+      actualManufacturerDirName = foundManufacturerDir;
+    } else {
+      console.warn(`Actual manufacturer directory not found for slug: ${driverManufacturerSlug}`);
+    }
+  }
+
+  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}/${actualManufacturerDirName}`);
 
   if (existsSync(contentDirPath)) {
     try {
       const filesInDir = readdirSync(contentDirPath);
-      const yamlFile = filesInDir.find(file => file.toLowerCase() === `${driverSlug}.yaml`);
+      const yamlFileName = `${driverSlug}.yaml`;
+      const yamlFile = filesInDir.find(file => slugify(file) === slugify(yamlFileName));
 
       if (yamlFile) {
         const yamlPath = path.resolve(contentDirPath, yamlFile);
@@ -57,23 +80,22 @@ for (const driver of driversInCategory) {
         const driverInfo = yaml.load(fileContents);
         if (driverInfo && typeof driverInfo === 'object') {
           if ('manufacturer' in driverInfo) {
-            uniqueManufacturers.add(driverInfo.manufacturer);
+            uniqueManufacturers.add(slugify(driverInfo.manufacturer));
           } else if ('Manufacturer' in driverInfo) {
-            uniqueManufacturers.add(driverInfo.Manufacturer);
+            uniqueManufacturers.add(slugify(driverInfo.Manufacturer));
           }
         }
       } else {
-        // console.warn(`YAML file not found for driver ${driverId} in ${contentDirPath}`); // Removed debug log
+        console.warn(`YAML file not found for driver ${driverId} in ${contentDirPath}`);
       }
     } catch (e) {
       console.error(`Error processing YAML for ${driverId}:`, e);
     }
   } else {
-    // console.warn(`Content directory not found for driver ${driverId}: ${contentDirPath}`); // Removed debug log
+    console.warn(`Content directory not found for driver ${driverId}: ${contentDirPath}`);
   }
 }
 
-// console.log(`Unique manufacturers for category "${categoryName}":`, Array.from(uniqueManufacturers)); // Removed debug log
 const manufacturers = Array.from(uniqueManufacturers);
 ---
 
@@ -83,10 +105,10 @@ const manufacturers = Array.from(uniqueManufacturers);
 }}>
   <div class="manufacturer-grid">
     {manufacturers.map(manufacturer => {
-      const manufacturerLink = `/drivers/${categoryName.toLowerCase()}/${manufacturer.toLowerCase()}`;
+      const manufacturerLink = `/drivers/${category}/${manufacturer}`;
       return (
         <a href={manufacturerLink} class="manufacturer-box">
-          <img src={`/images/manufacturers/${encodeURIComponent(manufacturer)}.png`} alt={`${manufacturer} logo`} class="manufacturer-logo" />
+          <img src={`/images/manufacturers/${manufacturer}.webp`} alt={`${manufacturer} logo`} class="manufacturer-logo" />
           <h2>{manufacturer}</h2>
         </a>
       );

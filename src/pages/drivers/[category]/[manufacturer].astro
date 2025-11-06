@@ -5,6 +5,7 @@ import yaml from 'js-yaml';
 import { readFileSync, existsSync, readdirSync } from 'node:fs'; // Added readdirSync
 import path from 'node:path';
 import { fileURLToPath } from 'node:url'; // Added fileURLToPath
+import { slugify } from '../../../utils/slugify';
 
 export async function getStaticPaths() {
   const allDrivers = await getCollection('docs');
@@ -12,9 +13,11 @@ export async function getStaticPaths() {
 
   for (const driver of allDrivers) {
     const category = driver.data.category || 'Uncategorized';
-    const driverId = driver.id; // e.g., drivers/mounts/eqmod
-    const driverSlug = driverId.split('/').pop(); // e.g., eqmod
-    const driverCategorySlug = driverId.split('/')[1]; // e.g., mounts
+    const driverId = driver.id; // e.g., drivers/mounts/skywatcher/eqmod
+    const driverParts = driverId.split('/');
+    const driverCategorySlug = slugify(driverParts[1]); // e.g., mounts
+    const driverManufacturerSlug = slugify(driverParts[2]); // e.g., skywatcher
+    const driverSlug = slugify(driverParts.pop()); // e.g., eqmod
 
     // Find the actual cased directory name for the category
     const baseContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers`);
@@ -23,9 +26,9 @@ export async function getStaticPaths() {
     if (existsSync(baseContentDirPath)) {
       const categoryDirs = readdirSync(baseContentDirPath, { withFileTypes: true })
         .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
+        .map(dirent => slugify(dirent.name));
 
-      const foundCategoryDir = categoryDirs.find(dir => dir.toLowerCase() === driverCategorySlug);
+      const foundCategoryDir = categoryDirs.find(dir => dir === driverCategorySlug);
       if (foundCategoryDir) {
         actualCategoryDirName = foundCategoryDir;
       } else {
@@ -33,13 +36,31 @@ export async function getStaticPaths() {
       }
     }
 
-    const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+    // Find the actual cased directory name for the manufacturer
+    const categoryContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+    let actualManufacturerDirName = driverManufacturerSlug;
+
+    if (existsSync(categoryContentDirPath)) {
+      const manufacturerDirs = readdirSync(categoryContentDirPath, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => slugify(dirent.name));
+
+      const foundManufacturerDir = manufacturerDirs.find(dir => dir === driverManufacturerSlug);
+      if (foundManufacturerDir) {
+        actualManufacturerDirName = foundManufacturerDir;
+      } else {
+        console.warn(`Actual manufacturer directory not found for slug: ${driverManufacturerSlug}`);
+      }
+    }
+
+    const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}/${actualManufacturerDirName}`);
     let manufacturer = 'Unknown';
 
     if (existsSync(contentDirPath)) {
       try {
         const filesInDir = readdirSync(contentDirPath);
-        const yamlFile = filesInDir.find(file => file.toLowerCase() === `${driverSlug}.yaml`);
+        const yamlFileName = `${driverSlug}.yaml`;
+        const yamlFile = filesInDir.find(file => slugify(file) === slugify(yamlFileName));
 
         if (yamlFile) {
           const yamlPath = path.resolve(contentDirPath, yamlFile);
@@ -62,12 +83,13 @@ export async function getStaticPaths() {
       console.warn(`Content directory not found for driver ${driverId}: ${contentDirPath}`);
     }
 
-    console.log(`Generating path for: Category=${category}, Manufacturer=${manufacturer}`); // Debug log
+    const slugifiedCategory = slugify(category);
+    const slugifiedManufacturer = slugify(manufacturer);
 
     paths.push({
       params: {
-        category: category.toLowerCase(),
-        manufacturer: manufacturer.toLowerCase(),
+        category: slugifiedCategory,
+        manufacturer: slugifiedManufacturer,
       },
       props: {
         categoryName: category,
@@ -84,8 +106,8 @@ export async function getStaticPaths() {
 }
 
 const { category: rawCategory, manufacturer: rawManufacturer } = Astro.params;
-const category = rawCategory.toLowerCase();
-const manufacturer = rawManufacturer.toLowerCase();
+const category = slugify(rawCategory);
+const manufacturer = slugify(rawManufacturer);
 const { categoryName, manufacturerName } = Astro.props;
 
 const allDrivers = await getCollection('docs');
@@ -93,9 +115,11 @@ const driversByManufacturer = [];
 
 for (const driver of allDrivers) {
   const driverCategory = driver.data.category || 'Uncategorized';
-  const driverId = driver.id; // e.g., drivers/mounts/eqmod
-  const driverSlug = driverId.split('/').pop(); // e.g., eqmod
-  const driverCategorySlug = driverId.split('/')[1]; // e.g., mounts
+  const driverId = driver.id; // e.g., drivers/mounts/skywatcher/eqmod
+  const driverParts = driverId.split('/');
+  const driverCategorySlug = slugify(driverParts[1]); // e.g., mounts
+  const driverManufacturerSlug = slugify(driverParts[2]); // e.g., skywatcher
+  const driverSlug = slugify(driverParts.pop()); // e.g., eqmod
 
   // Find the actual cased directory name for the category
   const baseContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers`);
@@ -104,9 +128,9 @@ for (const driver of allDrivers) {
   if (existsSync(baseContentDirPath)) {
     const categoryDirs = readdirSync(baseContentDirPath, { withFileTypes: true })
       .filter(dirent => dirent.isDirectory())
-      .map(dirent => dirent.name);
+      .map(dirent => slugify(dirent.name));
 
-    const foundCategoryDir = categoryDirs.find(dir => dir.toLowerCase() === driverCategorySlug);
+    const foundCategoryDir = categoryDirs.find(dir => dir === driverCategorySlug);
     if (foundCategoryDir) {
       actualCategoryDirName = foundCategoryDir;
     } else {
@@ -114,13 +138,31 @@ for (const driver of allDrivers) {
     }
   }
 
-  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  // Find the actual cased directory name for the manufacturer
+  const categoryContentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}`);
+  let actualManufacturerDirName = driverManufacturerSlug;
+
+  if (existsSync(categoryContentDirPath)) {
+    const manufacturerDirs = readdirSync(categoryContentDirPath, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => slugify(dirent.name));
+
+    const foundManufacturerDir = manufacturerDirs.find(dir => dir === driverManufacturerSlug);
+    if (foundManufacturerDir) {
+      actualManufacturerDirName = foundManufacturerDir;
+    } else {
+      console.warn(`Actual manufacturer directory not found for slug: ${driverManufacturerSlug}`);
+    }
+  }
+
+  const contentDirPath = path.resolve(process.cwd(), `src/content/docs/drivers/${actualCategoryDirName}/${actualManufacturerDirName}`);
   let driverManufacturer = 'Unknown';
 
   if (existsSync(contentDirPath)) {
     try {
       const filesInDir = readdirSync(contentDirPath);
-      const yamlFile = filesInDir.find(file => file.toLowerCase() === `${driverSlug}.yaml`);
+      const yamlFileName = `${driverSlug}.yaml`;
+      const yamlFile = filesInDir.find(file => slugify(file) === slugify(yamlFileName));
 
       if (yamlFile) {
         const yamlPath = path.resolve(contentDirPath, yamlFile);
@@ -143,7 +185,10 @@ for (const driver of allDrivers) {
     console.warn(`Content directory not found for driver ${driverId}: ${contentDirPath}`);
   }
 
-  if (driverCategory.toLowerCase() === category.toLowerCase() && driverManufacturer.toLowerCase() === manufacturer.toLowerCase()) {
+  const slugifiedDriverCategory = slugify(driverCategory);
+  const slugifiedDriverManufacturer = slugify(driverManufacturer);
+
+  if (slugifiedDriverCategory === category && slugifiedDriverManufacturer === manufacturer) {
     driversByManufacturer.push(driver);
   }
 }
@@ -155,10 +200,10 @@ for (const driver of allDrivers) {
 }}>
   <div class="driver-grid">
     {driversByManufacturer.map(driver => {
-      const driverPath = `/${driver.id.replace(/\.md$/, '')}`;
+      const driverPath = `/${slugify(driver.id.replace(/\.md$/, ''))}`;
       return (
         <a href={driverPath} class="driver-box">
-          <img src={driver.data.thumbnail || `/images/drivers/${driver.data.category}/${driver.data.title}.png`} alt={`${driver.data.title} thumbnail`} class="driver-thumbnail" />
+          <img src={driver.data.thumbnail || `/images/drivers/${slugify(driver.data.category || 'uncategorized')}/${slugify(driver.data.title || '')}.webp`} alt={`${driver.data.title} thumbnail`} class="driver-thumbnail" />
           <h2>{driver.data.title}</h2>
         </a>
       );
