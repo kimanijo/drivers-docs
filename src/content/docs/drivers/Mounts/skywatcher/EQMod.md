@@ -2,7 +2,7 @@
 title: EQMod
 category: Mounts
 description: INDI AZ-GTi Driver based on EQMod driver and is released as a 3rd party driver and requires INDI Library >= v1.7.5.
-thumbnail: /images/drivers/mounts/eqmod/eqmod.png
+thumbnail: /images/drivers/mounts/eqmod/eqmod.webp
 ---
 
 This document describes the INDI AZ-GTi Driver, which is based on the EQMod driver. It is released as a 3rd party driver and requires INDI Library >= v1.7.5.
@@ -36,7 +36,7 @@ This is the default mode. When the mount is powered, it is put into HotSpot Mode
 
 If the mount is started in HotSpot Mode, then connect the PC/StellarMate to the mount's open WiFi network. Then enter the IP address as `192.168.4.1` and port `11880`. Go to options and click `Save configuration`. Now you can connect directly to the mount. The machine running the client (Ekos, PixInsight, SkyCharts, etc.) should also be connected to the Mount WiFi HotSpot so that the mount, driver, and client are ALL on the same network, which in this case is the Mount WiFi HotSpot network.
 
-![AZ GTi HotSpot Diagram](/images/drivers/mounts/eqmod/az-gti-hotspot.png)
+![AZ GTi HotSpot Diagram](/images/drivers/mounts/eqmod/az-gti-hotspot.webp)
 
 The IP address in the image above for the devices connected to the mount WiFi are just examples. Usually, the first device that connects to the Mount HotSpot gets IP address `192.168.4.2` and so on.
 
@@ -61,13 +61,13 @@ Both modes can be enabled at the same time.
 
 The following image illustrates the connection topology for connecting the mount in Station Mode to a StellarMate WiFi HotSpot. All other devices must be connected to the StellarMate WiFi HotSpot as well.
 
-![AZ GTi Station Mode Diagram](/images/drivers/mounts/eqmod/az-gti-station-mode.png)
+![AZ GTi Station Mode Diagram](/images/drivers/mounts/eqmod/az-gti-station-mode.webp)
 
 #### Station Mode to Home WiFi
 
 In this mode, all the devices are connected to the home WiFi router. When setting the mount to Station Mode via the Synscan App, select the home wifi SSID and put the password to connect to it.
 
-![AZ GTi Station WiFi Diagram](/images/drivers/mounts/eqmod/az-gti-station-wifi.png)
+![AZ GTi Station WiFi Diagram](/images/drivers/mounts/eqmod/az-gti-station-wifi.webp)
 
 ## Operation
 
@@ -99,7 +99,7 @@ If a dome is used in conjunction with the mount, a policy can be set if parking 
 *   **Dome parks**: Park the mount if dome starts parking. This will disable the locking for dome parking, <font color="red">EVEN IF MOUNT PARKING FAILS.</font>
 *   **Both**: Dome locks & Dome parks policies are applied.
 
-![EQMod Options Diagram](/images/drivers/mounts/eqmod/eqmod-options.png)
+![EQMod Options Diagram](/images/drivers/mounts/eqmod/eqmod-options.webp)
 
 *   **Scope Properties**: Enter the Primary and Secondary scope information. Up to six different configurations for Primary and Secondary Guider telescopes can be saved separately, each with an optional unique label in the `Scope Name` property.
 *   **Scope Config**: Select the active scope configuration.
@@ -108,7 +108,7 @@ If a dome is used in conjunction with the mount, a policy can be set if parking 
 
 ### Motion Control
 
-![EQMod Motion Control Diagram](/images/drivers/mounts/eqmod/eqmod-motion.png)
+![EQMod Motion Control Diagram](/images/drivers/mounts/eqmod/eqmod-motion.webp)
 
 Under motion control, manual motion controls along with speed and guide controls are configured.
 
@@ -124,7 +124,7 @@ Under motion control, manual motion controls along with speed and guide controls
 
 Time, Location, and Park settings are configured in the Site Management tab.
 
-![EQMod Site Management Diagram](/images/drivers/mounts/eqmod/eqmod-site.png)
+![EQMod Site Management Diagram](/images/drivers/mounts/eqmod/eqmod-site.webp)
 
 *   **UTC**: UTC time and offsets must be set for proper operation of the driver upon connection. The UTC offset is in hours. East is positive and west is negative.
 *   **Location**: Latitude and Longitude must be set for proper operation of the driver upon connection. The longitude range is 0 to 360 degrees increasing eastward from Greenwich.
@@ -137,13 +137,13 @@ Time, Location, and Park settings are configured in the Site Management tab.
 
 The Firmware tab displays information on the detected mount type and firmware version. Furthermore, the RA/DE steps, frequencies, and gear ratios are displayed.
 
-![EQMod Firmware Diagram](/images/drivers/mounts/eqmod/eqmod-firmware.png)
+![EQMod Firmware Diagram](/images/drivers/mounts/eqmod/eqmod-firmware.webp)
 
 ### Motor Status
 
 The stepper motors positions and work periods are displayed in addition to the status of each motor. If the mount is equipped with auxiliary encoders, then their position shall be displayed.
 
-![EQMod Motor Status Diagram](/images/drivers/mounts/eqmod/eqmod-motor-status.png)
+![EQMod Motor Status Diagram](/images/drivers/mounts/eqmod/eqmod-motor-status.webp)
 
 ### Alignment
 
