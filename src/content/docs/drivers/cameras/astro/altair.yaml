@@ -1,0 +1,8 @@
+Website: www.altairastro.com
+Driver Name: Altair
+Driver Executable: indi_altair_ccd
+Family: CCDs
+Manufacturer: Altair
+Platforms: Linux, MacOS
+Author: Jasem Mutlaq
+Version: 1.1
