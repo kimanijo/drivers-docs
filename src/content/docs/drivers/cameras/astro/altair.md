@@ -1,6 +1,6 @@
 ---
 title: Altair
-category: Cameras
+category: Camera
 description: Altair supports the standard single-frame capture mode in addition to video streaming when supportted.
 thumbnail: /images/drivers/cameras/altair/altair.webp
 ---
