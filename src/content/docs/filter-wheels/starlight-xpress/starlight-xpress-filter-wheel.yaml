@@ -4,6 +4,7 @@ category_name: Filter Wheels
 manufacturer_name: Starlight Xpress
 
 # Additional Metadata
+website: https://www.sxccd.com/filterwheels/
 executable: indi_sx_wheel
 family: Filter Wheels
 platforms: Linux, BSD, OSX

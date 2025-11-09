@@ -2,6 +2,7 @@
 import yaml from "js-yaml";
 import path from "node:path";
 import { existsSync, readFileSync } from "node:fs";
+import { Image } from "astro:assets";
 import TableOfContents from "@astrojs/starlight/components/TableOfContents.astro";
 import { slugify } from "../utils/slugify";
 
@@ -10,6 +11,9 @@ let driverInfo: Record<string, any> = {};
 let driverManufacturerDisplay = "N/A";
 let driverId = "";
 let yamlPath = "";
+let driverImagePath = "";
+let driverImageExists = false;
+let driverWebsite = "";
 
 // Extract driverId from the current URL path
 // Example: /mounts/sky-watcher/eqmod/ -> mounts/sky-watcher/eqmod
@@ -48,6 +52,29 @@ if (currentPath.startsWith("/")) {
             } else if (driverInfo.manufacturer) {
               driverManufacturerDisplay = driverInfo.manufacturer as string;
             }
+            if (driverInfo.website) {
+              driverWebsite = driverInfo.website as string;
+              // Ensure the website URL is absolute
+              if (
+                !driverWebsite.startsWith("http://") &&
+                !driverWebsite.startsWith("https://")
+              ) {
+                driverWebsite = `https://${driverWebsite}`;
+              }
+            }
+          }
+
+          // Construct image path and check existence
+          const imageFileName = `${driverSlug}.webp`;
+          const imageDirPath = path.resolve(
+            process.cwd(),
+            `public/images/${driverCategorySlug}/${driverManufacturerSlug}`,
+          );
+          const potentialImagePath = path.resolve(imageDirPath, imageFileName);
+
+          if (existsSync(potentialImagePath)) {
+            driverImagePath = `/images/${driverCategorySlug}/${driverManufacturerSlug}/${imageFileName}`;
+            driverImageExists = true;
           }
         }
       } catch (e) {
@@ -63,6 +90,25 @@ if (currentPath.startsWith("/")) {
 
 <aside class="starlight-right-sidebar">
   {
+    driverImageExists && driverWebsite && (
+      <a
+        href={driverWebsite}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="driver-thumbnail-link"
+      >
+        <Image
+          src={driverImagePath}
+          alt={`${driverInfo.driver_name || "Driver"} Thumbnail`}
+          width={320}
+          height={180}
+          class="driver-thumbnail"
+        />
+      </a>
+    )
+  }
+
+  {
     Object.entries(driverInfo).length > 0 ? (
       <div class="driver-info-container">
         <div class="info-row">
@@ -75,7 +121,8 @@ if (currentPath.startsWith("/")) {
               key.toLowerCase() !== "manufacturer" &&
               key.toLowerCase() !== "manufacturer_name" &&
               key.toLowerCase() !== "category_name" &&
-              key.toLowerCase() !== "driver_name",
+              key.toLowerCase() !== "driver_name" &&
+              key.toLowerCase() !== "website",
           )
           .map(([key, value]) => (
             <div class="info-row">
@@ -107,6 +154,26 @@ if (currentPath.startsWith("/")) {
     border-left: 1px solid var(--sl-color-gray-5);
     margin-left: 1.5rem;
     width: max-content;
+  }
+
+  .driver-thumbnail-link {
+    display: block;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .driver-thumbnail-link:hover {
+    transform: translateY(-3px);
+  }
+
+  .driver-thumbnail {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 
   .driver-info-container {
