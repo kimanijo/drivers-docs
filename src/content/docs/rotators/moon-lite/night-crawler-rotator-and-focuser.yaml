@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_Name: Nightcrawler
+category_name: rotators
+manufacturer_name: MoonLite
+
+# Additional Metadata
+website: focuser.com
+executable: indi_nightcrawler_focus
+family: Focusers
+platforms: Linux, BSD, MacOS
+author: Jasem Mutlaq
+version: 1.0

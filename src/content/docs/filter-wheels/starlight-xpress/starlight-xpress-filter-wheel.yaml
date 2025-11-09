@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_Name: Starlight Xpress Filter Wheel
+category_name: Filter Wheels
+manufacturer_name: Starlight Xpress
+
+# Additional Metadata
+executable: indi_sx_wheel
+family: Filter Wheels
+platforms: Linux, BSD, OSX
+author: Peter Polakovic
+version: 1.2

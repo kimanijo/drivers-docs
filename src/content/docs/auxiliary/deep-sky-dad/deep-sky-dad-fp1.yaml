@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: DeepSkyDad FP1
+category_name: Auxiliary
+manufacturer_name: DeepSkyDad
+
+# Additional Metadata
+website: shop.deepskydad.com/product/wo-redcat-flap-panel-fp1/
+executable: indi_deepskydad_fp1
+family: Auxiliary (Light Box, Dust Cap)
+platforms: Linux, BSD, MacOS
+author: Pavle Gartner
+version: 1.0
