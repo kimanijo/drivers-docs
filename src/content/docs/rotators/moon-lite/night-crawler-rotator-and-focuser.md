@@ -1,6 +1,6 @@
 ---
-title: Nightcrawler
-category: rotator
+title: NightCrawler
+category: Rotator
 description: Nightcrawler
 thumbnail: /images/rotators/night-crawler-rotator-and-focuser/night-crawler-rotator-and-focuser.webp
 ---

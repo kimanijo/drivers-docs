@@ -1,6 +1,6 @@
 ---
 title: AAG Cloud Watcher
-category: weather-station
+category: Weather Station
 description: AAG Cloud Watcher
 thumbnail: /images/weather-station/aag-cloud-watcher/aag-cloud-watcher.webp
 ---
