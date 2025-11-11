@@ -157,7 +157,7 @@ src/content/docs/
 **Directory Naming Convention:**
 - Use **lowercase** with **hyphens** for directory names (e.g., `sky-watcher`, `deep-sky-dad`, `ikarus-technologies`)
 - Category directories: `mounts`, `cameras`, `dustcaps`, `lightboxes`, etc.
-- Manufacturer directories: `sky-watcher`, `deep-sky-dad`, `zwo`, `qhyccd`, etc.
+- Manufacturer directories: `sky-watcher`, `deep-sky-dad`, `zwo`, `qhyccd`, etc. ("Generic" if there is no)
 - Driver directories: `eqmod`, `deep-sky-dad-fp1`, etc.
 - Driver filenames must match directory: `eqmod/eqmod.md`, `deep-sky-dad-fp1/deep-sky-dad-fp1.md`, etc.
 
@@ -198,7 +198,7 @@ version: 1.0
 
 **Key Fields:**
 - `driver_name`: Human-friendly driver name (displayed on the website)
-- `manufacturer_name`: Human-friendly manufacturer name (e.g., "Sky Watcher", "Ikarus Technologies")
+- `manufacturer_name`: Human-friendly manufacturer name (e.g., "Sky Watcher", "Ikarus Technologies", and "Generic" if there is no)
 - `categories`: Array of category slugs the driver belongs to (e.g., `["mounts"]`, `["dustcaps", "lightboxes"]`)
 - Additional fields: You can add any custom metadata that will be displayed in the driver information sidebar
 
