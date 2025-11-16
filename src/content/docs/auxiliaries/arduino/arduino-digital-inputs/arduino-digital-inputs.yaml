@@ -1,6 +1,7 @@
 # Display Names (Human-Friendly - Required)
 driver_name: Arduino Digital Inputs
 manufacturer_name: Arduino
+
 # Categories (Required - can be multiple)
 categories:
   - auxiliaries
