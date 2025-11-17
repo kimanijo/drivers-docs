@@ -1,0 +1,14 @@
+# Display Names (Human-Friendly - Required)
+driver_name: Waveshare POE Modbus RTU Relay
+manufacturer_name: Waveshare
+
+# Categories (Required - can be multiple)
+categories:
+  - auxiliaries
+
+# Additional Metadata (Optional)
+executable: indi_wavesharemodbus_relay
+Platforms: Linux, MacOS, BSD
+Author: Jasem Mutlaq
+version: 0.1
+

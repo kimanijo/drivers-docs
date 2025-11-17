@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: Apogee CCD
+categories: ["cameras"]
+manufacturer_name: Apogee
+
+# Additional Metadata
+executable: indi_apogee_ccd
+platforms: Linux
+author: Jasem Mutlaq
+version: 1.0

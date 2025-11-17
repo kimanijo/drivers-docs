@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: Atik Cameras & Filter Wheels
+categories: ["cameras"]
+manufacturer_name: Atik
+
+# Additional Metadata
+executable: indi_ffmv_ccd
+author: Jasem Mutlaq
+version: 0.3
+
