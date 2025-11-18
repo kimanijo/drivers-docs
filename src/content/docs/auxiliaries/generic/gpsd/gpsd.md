@@ -21,7 +21,7 @@ Make sure GPS is receiving data by running  _gpsmon_
 
 ![gpsd main control](./images/gpsd_main_control.webp)Upon connection, it should take a few seconds before the GPS fixed is usually obtained. Depending on your client, you might need to configure it to synchronize it with GPS data with the mount and other devices. KStars performs this synchronization automatically without requiring any further action from the user.
 
-### What's difference between INDI GPSD (this driver) and INDI GPS NMEA drivers?
+### GPSD vs NMEA?
 
 INDI GPS NMEA driver fills the gap for people who use mobile phone's gps for setting location and time in KStars/Ekos. indi-gpsd does pretty much the same, however it is based on different approach. Both of the drivers set time and location (over INDI server) to other INDI drivers (e.g. mount) and clients (e.g. KStars), but:  
   
