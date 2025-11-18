@@ -2,7 +2,7 @@
 title: Pegasus FlatMaster
 categories: ["auxiliaries"]
 description: Pegasus FlatMaster
-thumbnail: ./pegasus-flatMaster.webp
+thumbnail: ./pegasus-flatmaster.webp
 ---
 
 
