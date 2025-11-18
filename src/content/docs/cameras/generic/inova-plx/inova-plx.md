@@ -1,6 +1,6 @@
 ---
 title: iNova PLX
-categories: ["auxiliaries"]
+categories: ["cameras"]
 description: iNova PLX.
 thumbnail: ./inova-plx.webp
 ---

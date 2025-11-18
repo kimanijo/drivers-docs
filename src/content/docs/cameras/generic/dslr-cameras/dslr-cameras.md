@@ -1,6 +1,6 @@
 ---
 title: DSLR Camera
-categories: ["auxiliaries"]
+categories: ["cameras"]
 description: DSLR Camera.
 thumbnail: ./dslr-camera.webp
 ---
