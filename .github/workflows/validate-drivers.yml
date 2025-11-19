@@ -15,95 +15,88 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Validate driver documentation structure
+      - name: Validate Driver Structure
         run: |
-          # Check for one .md and one .yaml file per driver
-          find src/content/docs -mindepth 2 -maxdepth 2 -type d | while read -r category_dir; do
-            category_name=$(basename "$category_dir")
-            find "$category_dir" -mindepth 1 -maxdepth 1 -type d | while read -r driver_dir; do
-              driver_name=$(basename "$driver_dir")
-              md_files=$(find "$driver_dir" -maxdepth 1 -type f -name "*.md" | wc -l)
-              yaml_files=$(find "$driver_dir" -maxdepth 1 -type f -name "*.yaml" | wc -l)
+          # Check for driver.md, driver.yaml, driver.webp, and optional images/ directory
+          find src/content/docs -mindepth 3 -maxdepth 3 -type d | while read -r driver_dir; do
+            driver_name=$(basename "$driver_dir")
+            
+            # Check for driver.md
+            if [ ! -f "$driver_dir/$driver_name.md" ]; then
+              echo "::error file=$driver_dir::Driver directory '$driver_dir' must contain '$driver_name.md'."
+              exit 1
+            fi
 
-              if [ "$md_files" -ne 1 ]; then
-                echo "::error file=$driver_dir::Driver directory '$driver_dir' must contain exactly one .md file. Found $md_files."
-                exit 1
-              fi
-              if [ "$yaml_files" -ne 1 ]; then
-                echo "::error file=$driver_dir::Driver directory '$driver_dir' must contain exactly one .yaml file. Found $yaml_files."
-                exit 1
-              fi
-            done
+            # Check for driver.yaml
+            if [ ! -f "$driver_dir/$driver_name.yaml" ]; then
+              echo "::error file=$driver_dir::Driver directory '$driver_dir' must contain '$driver_name.yaml'."
+              exit 1
+            fi
+
+            # Check for driver.webp
+            if [ ! -f "$driver_dir/$driver_name.webp" ]; then
+              echo "::error file=$driver_dir::Driver directory '$driver_dir' must contain '$driver_name.webp'."
+              exit 1
+            fi
+
+            # Check for optional images directory
+            if [ -d "$driver_dir/images" ]; then
+              echo "Info: Driver directory '$driver_dir' contains an optional 'images/' subdirectory."
+            fi
           done
 
-      - name: Validate image formats
+          # Use regex to ensure all .md, .yaml, and .webp files are at the correct driver level and named correctly
+          # Expected path format: src/content/docs/{category}/{manufacturer}/{driver}/{driver_name}.(md|yaml|webp)
+          find src/content/docs -type f -regex ".*\\.\\(md\\|yaml\\|webp\\)$" -print0 | while IFS= read -r -d $'\0' file; do
+            # Extract driver_name from the file path for comparison
+            # Example: file = src/content/docs/category/manufacturer/driver_name/driver_name.md
+            # Expected pattern for driver_name: ([^/]+)
+            # Full path pattern: ^src/content/docs/[^/]+/[^/]+/([^/]+)/\1\.(md|yaml|webp)$
+            if ! echo "$file" | grep -Pq "^src/content/docs/[^/]+/[^/]+/([^/]+)/\\1\\.(md|yaml|webp)$"; then
+              echo "::error file=$file::Misplaced or incorrectly named driver file. Expected format: src/content/docs/{{category}}/{{manufacturer}}/{{driver_name}}/{{driver_name}}.(md|yaml|webp)"
+              exit 1
+            fi
+          done
+
+      - name: Validate All Image Formats
         run: |
-          # Check driver thumbnails
-          find src/content/docs -type f ! -name "*.webp" -print0 | while IFS= read -r -d $'\0' file; do
-            echo "::error file=$file::Driver thumbnail '$file' must be in .webp format."
+          # Check all images in src/content/docs (including driver.webp and images/ subdirectory)
+          # Ensure no other image formats are present anywhere in src/content/docs
+          find src/content/docs -type f -regex ".*\\.\\(png\\|jpg\\|jpeg\\|gif\\|bmp\\)$" -print0 | while IFS= read -r -d $'\0' file; do
+            echo "::error file=$file::Image file '$file' must be in .webp format. Other formats are not allowed in driver documentation directories."
             exit 1
           done
-          # Check manufacturer logos
+
+          # Check all images in public/images/manufacturers
           find public/images/manufacturers -type f ! -name "*.webp" -print0 | while IFS= read -r -d $'\0' file; do
             echo "::error file=$file::Manufacturer logo '$file' must be in .webp format."
             exit 1
           done
-          # Check category icons
+
+          # Check all images in public/images/categories
           find public/images/categories -type f ! -name "*.webp" -print0 | while IFS= read -r -d $'\0' file; do
             echo "::error file=$file::Category icon '$file' must be in .webp format."
             exit 1
           done
 
-      - name: Validate images exist
+      - name: Validate Referenced Images Exist
         run: |
-          find src/content/docs -name "*.yaml" | while read -r yaml_file; do
-            manufacturer=$(grep "Manufacturer:" "$yaml_file" | awk -F': ' '{print $2}' | tr -d '\r')
-
-            if [ -n "$manufacturer" ]; then
-              manufacturer_slug=$(echo "$manufacturer" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/--/-/g' | sed 's/^-//' | sed 's/-$//')
-              manufacturer_image="public/images/manufacturers/${manufacturer_slug}.webp"
-              if [ ! -f "$manufacturer_image" ]; then
-                echo "::error file=$yaml_file::Manufacturer image for '$manufacturer' not found at '$manufacturer_image'."
-                exit 1
-              fi
-            else
-              echo "::error file=$yaml_file::Manufacturer name not found in '$yaml_file'."
+          # Validate category logos based on directory names
+          find src/content/docs -mindepth 1 -maxdepth 1 -type d | while read -r category_dir; do
+            category_name=$(basename "$category_dir")
+            category_image="public/images/categories/${category_name}.webp"
+            if [ ! -f "$category_image" ]; then
+              echo "::error file=$category_dir::Category logo for directory '$category_name' not found at '$category_image'."
               exit 1
             fi
           done
 
-          find src/content/docs -name "*.md" | while read -r md_file; do
-            category=$(grep "category:" "$md_file" | awk -F': ' '{print $2}' | tr -d '\r')
-            if [ -n "$category" ]; then
-              category_slug=$(echo "$category" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/--/-/g' | sed 's/^-//' | sed 's/-$//')
-              category_image="public/images/categories/${category_slug}.webp"
-              if [ ! -f "$category_image" ]; then
-                echo "::error file=$md_file::Category image for '$category' not found at '$category_image'."
-                exit 1
-              fi
-            else
-              echo "::error file=$md_file::Category name not found in '$md_file'."
-              exit 1
-            fi
-
-            thumbnail=$(grep "thumbnail:" "$md_file" | awk -F': ' '{print $2}' | tr -d '\r')
-            title=$(grep "title:" "$md_file" | awk -F': ' '{print $2}' | tr -d '\r')
-            if [ -n "$thumbnail" ]; then
-              thumbnail_image="public${thumbnail}"
-              if [ ! -f "$thumbnail_image" ]; then
-                echo "::error file=$md_file::Thumbnail image for '$title' not found at '$thumbnail_image'."
-                exit 1
-              fi
-            else
-              echo "::error file=$md_file::Thumbnail image not found in '$md_file'."
+          # Validate manufacturer logos based on directory names
+          find src/content/docs -mindepth 2 -maxdepth 2 -type d | while read -r manufacturer_dir; do
+            manufacturer_name=$(basename "$manufacturer_dir")
+            manufacturer_image="public/images/manufacturers/${manufacturer_name}.webp"
+            if [ ! -f "$manufacturer_image" ]; then
+              echo "::error file=$manufacturer_dir::Manufacturer logo for directory '$manufacturer_name' not found at '$manufacturer_image'."
               exit 1
             fi
           done
