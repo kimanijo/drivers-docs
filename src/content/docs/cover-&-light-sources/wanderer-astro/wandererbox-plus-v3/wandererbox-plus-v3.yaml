@@ -1,9 +1,0 @@
-# Display Names (Human-Friendly)
-driver_name: WandererBox Plus V3
-categories: ["cover-&-lihgt-sources"]
-manufacturer_name: Wanderer Astro
-
-# Additional Metadata
-executable: indi_wandererbox_plus_v3
-version: 1.0
-

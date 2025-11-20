@@ -1,9 +1,0 @@
-# Display Names (Human-Friendly)
-driver_name: FlipFlat
-categories: ["cover-&-lihgt-sources"]
-manufacturer_name: Generic
-
-# Additional Metadata
-executable:indi_pegasus_uch
-version: 0.1
-
