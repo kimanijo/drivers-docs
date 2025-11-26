@@ -1,12 +1,11 @@
 # Display Names (Human-Friendly)
-driver_name: Celestron SCT
+driver_name: DeepSkyDad AF2
 categories: ["focusers"]
-manufacturer_name: Celestron
+manufacturer_name: Deep Sky Dad
 
 # Additional Metadata
-executable: indi_celestron_sct_focus
+executable: indi_deepskydad_af2_focus
 Platforms: Linux, Mac, BSD
-Author: Chris Rowland
+Author: Pavle Gartner
 version: 1.0
-
 
