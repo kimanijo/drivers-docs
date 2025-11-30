@@ -1,0 +1,13 @@
+# Display Names (Human-Friendly)
+driver_name: FCUSB
+categories: ["focusers"]
+manufacturer_name: Shoestring Astronomy
+
+# Additional Metadata
+website: takahashi-europe.com
+executable: indi_fcusb_focuser
+platforms: Linux, MacOS X, Raspberry PI
+author: Wouter van Reeven
+version: 1.0
+
+

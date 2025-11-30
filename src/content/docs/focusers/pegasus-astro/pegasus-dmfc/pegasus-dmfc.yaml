@@ -1,10 +1,11 @@
 # Display Names (Human-Friendly)
-driver_name: Armadillo/Platypus
+driver_name: Pegasus DMFC
 categories: ["focusers"]
-manufacturer_name: Lunatico
+manufacturer_name: Pegasus Astro
+
 # Additional Metadata
-executable: armadillo_focus
+executable: indi_dmfc_focus
 Platforms: Linux, MacOS, BSD
-Author: Jaime Alemany
+Author: Jasem Mutlaq
 version: 1.0
 

@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: Optec TCF-S
+categories: ["focusers"]
+manufacturer_name: Optec Inc
+
+# Additional Metadata
+executable: indi_tcfs_focus/indi_tcfs3_focus
+Platforms: Linux , BSD, OSX
+Author: Brian Crook
+version: 1.0
+
+
