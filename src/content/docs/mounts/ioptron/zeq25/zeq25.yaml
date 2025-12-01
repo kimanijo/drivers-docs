@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: ZEQ25
+categories: ["mounts"]
+manufacturer_name: iOptron
+
+# Additional Metadata
+executable: indi_lx200zeq25
+platforms: Linux, BSD, OSX
+author: Jasem Mutlaq
+version: 1.0

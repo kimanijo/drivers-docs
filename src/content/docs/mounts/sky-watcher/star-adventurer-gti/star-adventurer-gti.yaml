@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: Star Adventurer GTi
+categories: ["mounts"]
+manufacturer_name: Sky Watcher
+
+# Additional Metadata
+executable: indi_staradventurergti_telescope
+Models: All Models
+

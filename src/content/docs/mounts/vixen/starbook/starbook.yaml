@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: Starbook
+categories: ["mounts"]
+manufacturer_name: Vixen
+
+# Additional Metadata
+Website: global.vixen.co
+executable: indi_starbook_telescope
+platforms: Linux, BSD, MacOS
+author: not7cd
+version: 0.5
+

@@ -1,0 +1,13 @@
+# Display Names (Human-Friendly)
+driver_name: Celestron AUX
+categories: ["mounts"]
+manufacturer_name: Celestron
+
+# Additional Metadata
+website: www.celestron.com
+Tags: telescope, celestron, mount
+executable: indi_celestron_aux
+platforms: Linux, BSD, OSX
+author: Hy Murveit
+version: 1.0
+
