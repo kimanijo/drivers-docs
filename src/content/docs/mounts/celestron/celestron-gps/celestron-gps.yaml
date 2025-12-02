@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: Celestron GPS
+categories: ["mounts"]
+manufacturer_name: Celestron
+
+# Additional Metadata
+website: www.celestron.com
+executable: indi_celestron_gps
+platforms: Linux, BSD, OSX
+author: Jasem Mutlaq, Juan Menendez, Chris Rowland
+version: 3.4
+

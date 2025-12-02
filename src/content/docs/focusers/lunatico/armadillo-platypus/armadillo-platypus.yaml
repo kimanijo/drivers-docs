@@ -1,8 +1,7 @@
 # Display Names (Human-Friendly)
 driver_name: Armadillo/Platypus
 categories: ["focusers"]
-manufacturer_name: Generic
-
+manufacturer_name: Lunatico
 # Additional Metadata
 executable: armadillo_focus
 Platforms: Linux, MacOS, BSD

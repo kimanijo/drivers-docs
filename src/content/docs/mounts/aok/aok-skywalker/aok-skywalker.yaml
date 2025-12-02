@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: AOK Skywalker
+categories: ["mounts"]
+manufacturer_name: AOK
+
+# Additional Metadata
+website: www.aokswiss.ch
+executable: indi_lx200aok
+platforms: Linux, BSD, MacOS
+author: T. Schriber
+version: 0.8

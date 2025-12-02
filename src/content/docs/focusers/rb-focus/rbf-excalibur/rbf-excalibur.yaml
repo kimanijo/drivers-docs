@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: RBF Excalibur
+categories: ["focusers"]
+manufacturer_name: RB Focus
+
+# Additional Metadata
+executable: indi_Excalibur
+version: 1.0
+

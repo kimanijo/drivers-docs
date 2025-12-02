@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: NexStar Evolution
+categories: ["mounts"]
+manufacturer_name: Celestron
+
+# Additional Metadata
+website: www.celestron.com
+executable: indi_nexstarevo
+platforms: Linux, OSX
+author: Paweł T. Jochym
+version: 3.0
+

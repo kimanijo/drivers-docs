@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: nFocus
+categories: ["focusers"]
+manufacturer_name: Rigel Systems
+
+# Additional Metadata
+website: rigel.datacorner.com
+executable: indi_activefocuser_focus
+platforms: Linux, BSD, OSX
+author: Jasem Mutlaq
+version: 1.1

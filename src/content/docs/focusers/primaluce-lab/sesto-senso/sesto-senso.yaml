@@ -1,0 +1,13 @@
+# Display Names (Human-Friendly)
+driver_name: Sesto Senso
+categories: ["focusers"]
+manufacturer_name: Primaluce Lab
+
+# Additional Metadata
+Website: www.primalucelab.com
+executable: indi_sestosenso_focus
+Platforms: Linux, BSD, OSX
+Author: Jasem Mutlaq
+version: 1.0
+
+

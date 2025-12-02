@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: RBF RBFocus
+categories: ["focusers"]
+manufacturer_name: RB Focus
+
+# Additional Metadata
+executable: indi_rbfocus_focus
+Platforms: Linux, BSD, OSX
+Author: RBG
+version: 1.0
+

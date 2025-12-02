@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: RainbowRSF
+categories: ["focusers"]
+manufacturer_name: Rainbow Astro
+
+# Additional Metadata
+executable: indi_rainbowrsf_focus
+platforms: Linux, BSD, OSX
+author: Abdulaziz Bouland
+version: 1.0
+
+

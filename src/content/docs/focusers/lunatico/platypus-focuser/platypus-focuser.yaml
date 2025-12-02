@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: Platypus focuser
+categories: ["focusers"]
+manufacturer_name: Lunatico
+
+# Additional Metadata
+executable: indi_platypus_focus
+version: 2.1
+
+

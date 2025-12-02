@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: ASI EAF
+categories: ["focusers"]
+manufacturer_name: ZWO
+
+# Additional Metadata
+Website: astronomy-imaging-camera.com
+executable: indi_tscam_focuser
+Platforms: Unix, Mac
+version: 1.0
+

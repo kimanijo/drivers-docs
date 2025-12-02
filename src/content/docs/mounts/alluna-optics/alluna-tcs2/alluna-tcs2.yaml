@@ -1,0 +1,8 @@
+# Display Names (Human-Friendly)
+driver_name: Alluna Optics
+categories: ["mounts"]
+manufacturer_name: Alluna Optics
+
+# Additional Metadata
+executable: indi_lx200_alluna_tcs2
+version: 1.0
