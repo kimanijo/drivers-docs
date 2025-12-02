@@ -1,12 +1,11 @@
 # Display Names (Human-Friendly)
 driver_name: AstroPhysics V2
 categories: ["mounts"]
-manufacturer_name: Astrophysics
+manufacturer_name: Astrotrac
 
 # Additional Metadata
-website: www.astro-physics.com
-executable: indi_lx200ap_v2
-platforms: Linux, BSD, OSX
-author: Hy Murveit
+website: www.astrotrac.com
+executable: indi_astrotrac_telescope
+platforms: Linux, BSD, MacOS
+author: Jasem Mutlaq
 version: 1.0
-

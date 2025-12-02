@@ -7,48 +7,61 @@ thumbnail: ./astrotrac-360.webp
 
 ## Features
 
-This driver supports Astro-Physics mounts over a serial or wired LAN connection with a firmware version of 'V' or newer. Only GTOCP3, GTOCP4, and GTOCP5 Control Boxes are supported. For GTOCP1 and GTOCP2, please use the legacy driver.
+This INDI Astrotrac driver interacts with Astrotrac mounts via WiFi. It fully supports all the mount features and provides support for a mount model powered by  [INDI Alignment Subsystem](https://www.indilib.org/api/md_libs_indibase_alignment_alignment_white_paper.html). This results in highly accurate GOTOs when used with a plate solving software (e.g. Ekos) as the driver compensates for differences between the sky and mount coordinates on the fly.
 
-While the driver was designed to be used in a fully remote observatory without any operator presense, it is highly recommended to test the driver with your mount to ensure safe and proper operation. The driver is not a replacement to AP's Command Center (APCC). No advanced mount modeling is support except for simple SYNCs.
+Current features are:
+
+-   Goto/Slew/Sync.
+-   Park/Unpark with configurable custom parking positions.
+-   Custom tracking rates
+-   Custom acceleration rates
+-   Guiding
+-   Sidereal, lunar, solar and custom trackrates
+-   Full joystick support
+-   Mount modelling
+
+![Main Control](./images/main_control.webp)
+
+## Connectivity
+
+The driver communicates with the mount over the netwrok. Therefore, before establishing connection to the mount, you must set the mount's IP address and port in the  _Connection_  tab. Please ensure the machine running the driver is on the same network as the mount so they can talk to each other.
+
+![Connection](./images/connection.webp)
+
+Please note 2 ways to connect RA/DEC drives
+
+1.  RA power first then once on then after 15 or so seconds connect cable from RA to DEC , that should trigger the RA to configure the DEC as a DEC automatically
+2.  However with some peoples mounts that doesn’t happen due to some issue that Richard from Astrotrac does not know how to fix in which case you have to manually configure the DEC drive as a DEC drive:
+    1.  In this case you can connect the RA and DEC connecting cable before powering on everything or after it does not matter
+    2.  You then connect to the drive you will configure as a DEC drive and connect to its wifi (AstroTrac360:RA:XX.XX.XX.XX) from any device can be same or for example your phone. Navigate to the IP address via the browser and go to the console (in the UI)
+    3.  You type 1i50 and hit enter
+    4.  The drive will now disconnect itself and in a few moments will appear as AstroTrac360:DEC:XX.XX.XX.XX ( WHERE XX IS THE IP address OF YOUR DRIVE)
+    5.  Now the RA drive will be able to send commands via the cable to control the DEC drive
+
+For more information on communication with the mount, you can check a  [detailed INDI thread](https://www.indilib.org/forum/mounts/10366-astrotrac-360-indi-driver-documentation-development.html)  on the subject.
 
 ## Operation
 
-### First Time
-
--   Use one of the predefined "ParkTo" positions of PARK1/PARK2/PARK3/PARk4. They are the only park positions supported. These are defined in this document from Astro-Physics: [PARK POSITIONS](http://www.astro-physics.com/images/Park_Positions_Defined.pdf)
--   Make sure the  _**Unpark From**_ option on the  **Main** is set to  **Last Parked**. This is the safest option since it will let the mount determine its position based on where it was last parked. The only reason to use a different setting is if the mount seems to have lost sense of where it is and you want to start from a predefined position.
--   Do not try parking the mount until this position is defined.
--   Save these options using the _**"Save"**_ button on the **Options**  tab or else the changes will be loss when the driver is closed.
-
-![main control](./images/thumb_main_control.webp)
+By default, the mount type is set to  **German-Equatorial (GEM)**  and can be switched to  **Single-ARM**  mode if desired. This must be done  _before_  connecting to the mount.
 
 ### Main Control
 
--   **Connect:**  You can manually connect/disconnect to the mount.
--   **UnparkFrom?:** This should usually be set to LastParked. That means when you unpark, the mount remembers where it was last pointing, and as long as the geography and time are properly set in the mount, and the user has not move the mount's pointing position manually, it should be able to recover its position. You can force it to assume it is in the Park1, Park2, Park3, or Park4 position, but, of course, please make sure it really is. These are positions defined in this document from Astro-Physics: [PARK POSITIONS](http://www.astro-physics.com/images/Park_Positions_Defined.pdf)
--   **ParkTo?:** Tell the mount which of the above 4 park positions should be used.
--   **Manual Set Parked:** This is a button to help fix a problematic mount. You can force the mount to consider itself parked whereever it is pointing by pressing this button. After doing that, you would manually place it in a known park position, set UnparkFrom? to that position, and click unpark. Carefully test to make sure the mount is acting reasonably. Please supervise very carefully and be prepared to stop motion (possibly with a power switch). After that it is highly recommended to change UnparkFrom back to LastParked.
+The main control tab is where the primary control of Astrotrac takes place. To track an object, enter the equatorial of date (JNow) coordinates and press Set. The mount shall then slew to an object and once it arrives at the target location, it should engage tracking at the selected tracking rate which default to Sidereal tracking. Slew mode is different from track mode in that it does not engage tracking when slew is complete. To sync, the mount must be already tracking. First change mode to Sync, then enter the desired coordinates then press Set. Users will  _rarely_  use this driver controls directly since many clients (e.g. KStars) can slew and sync the mount directly from the sky map without having to enter any coordinates manually.
 
-Leave this option at "Last Parked" unless you know what you are doing. If you start the driver up and it is set to something besides "Last Parked" and the mount is not actually in the configured PARK position it will be very confused about where it is really pointing and lead to improper slews that may cause a pier strike!
-
-### Connection
-
-![connection](./images/thumb_connection.webp)
-
-The main control here is the port to connect to. The driver being used, and its version are also displayed.
+Four tracking modes are supported: Sidereal, Lunar, Solar, and Custom. When using _Custom_ mode, the rates defined in **Track Rates** shall be used. Tracking can be enganged and disenganged by toggling the **Tracking** property. The units are arcseconds per second.
 
 ### Options
 
-The  **Options** tab is used to set debugging and other configuration options, as well as being able to load and save configurations.
+Under the options tab, you can configure many parameters before and after you connect to the mount.
 
-![options](./images/thumb_options.webp)
+![Options](./images/options.webp)
 
--   **Debug**: Enable debug logging where verbose messaged can be logged either directly in the client or a file. If Debug is enabled, advanced properties are created to select how to direct debug output.  [Watch a video on how to submit logs](https://stellarmate.com/support/logs-submission.html).
--   **Simulation**: Enable to disable simulation mode for testing purposes.
--   **Configuration**: Load or Save the driver settings to a file. Click default to restore default settings that were shipped with the driver.
--   **Snoop Devices**: Indicate which devices the driver should communicate with:
+-   **Snoop Devices**: Indicate which devices Paramount should communicate with:
     -   **GPS**: If using a GPS driver (e.g. INDI GPSD) then enter its name here. EQMod shall sync its time and location settings from the GPS driver.
     -   **Dome**: If using a Dome driver, put its name here so that Dome Parking Policy can be applied.
+-   **Configuration**: Load or Save the driver settings to a file. Click default to restore default settings that were shipped with the driver.
+-   **Simulation**: Enable to disable simulation mode for testing purposes.
+-   **Debug**: Enable debug logging where verbose messaged can be logged either directly in the client or a file. If Debug is enabled, advanced properties are created to select how to direct debug output. [Watch a video on how to submit logs](https://stellarmate.com/support/logs-submission.html).
 -   #### Dome Parking Policy
     
     If a dome is used in conjunction with the mount, a policy can be set if parking the mount or dome can interfere with the safety of either. For example, you might want to always park the mount _before_ parking the dome, or vice versa. The default policy is to ignore the dome.
@@ -57,40 +70,42 @@ The  **Options** tab is used to set debugging and other configuration options, a
     -   **Dome locks**: **Prevent** the mount from unparking when dome is parked.
     -   **Dome parks**: Park the mount if dome starts parking. This will disable the locking for dome parking, EVEN IF MOUNT PARKING FAILS.
     -   **Both**: Dome locks & Dome parks policies are applied.
--   **Scope Properties**: Enter the Primary and Seconday scope information. Up to six different configurations for _Primary_ and Secondary _Guider_ telescopes can be saved separately, each with an optional unique label in  **Scope Name**  property.
+-   **Scope Properties**: Enter the Primary and Seconday scope information. Up to six different configurations for _Primary_ and Secondary _Guider_ telescopes can be saved separately, each with an optional unique label in **Scope Name** property.
 -   **Scope Config**: Select the active scope configuration.
--   **Joystick**: Enable or Disable joystick support. An INDI Joystick driver must be running for this function to work. For more details, check the  [INDI Telescope Joystick](https://stellarmate.com/support/tutorials/135-controlling-your-telescope-with-a-joystick.html)  tutorial.
+-   **Joystick**: Enable or Disable joystick support. An INDI Joystick driver must be running for this function to work. For more details, check the [INDI Telescope Joystick](https://stellarmate.com/support/tutorials/135-controlling-your-telescope-with-a-joystick.html) tutorial.
 
 ### Motion Control
 
+![Motion Control](./images/motion_control.webp)
+
 Under motion control, manual motion controls along with speed and guide controls are configured.
 
-![motion control](./images/thumb_motion_control.webp)
-
 -   **Motion N/S/W/E**: Directional manual motion control. Press the button to start the movement and release the button to stop.
--   **Slew Rate**: Rate of manual motion control above when 1x equals sidereal rate.
--   **PEC Playback**: Controls whether PEC correction are enabled.
--   **GOTO Rate**: Rate of motion for GOTO operations.
--   **Swap Buttons**: Reverse direction mount moves.
--   **Sync**: Controls whether SYNC or RECAL is used for syncs. The recommended setting is  **:CMR#**  to use RECAL!
+-   **Slew Rate**: Rate of manual motion control above when 1x equals sidereal rate. This feature is currently not supported in the firmware since the slew speed is fixed to 10800 arcsec per sec.
+-   **Acceleration**: Acceleration rates per axis in arcseconds per seconds squared. The mount uses this value to accelerate from rest to the full slew speed (currently fixed at 10800 arcsecs per sec by the mount firmware).
+-   **Encoders**: Displays the current Hour-Angle (HA) and Declination (DE) axis encoder values in degrees. You can manually command the mount to move to a specific encoder position by changing this property.
+-   **Guide N/S/W/E**: Guiding pulses durations in milliseconds. This property is meant for guider application (e.g. PHD2) and not intended to be used directly.
 
 ### Site Management
 
- ![site management](./images/thumb_site_management.webp)
+Time, Locaiton, and Park settings are configured in the Site Management tab.
 
-Time and Location are configured in the Site Management tab.
+![Site Management](./images/site_management.webp)
 
 -   **UTC**: UTC time and offsets must be set for proper operation of the driver upon connection. The UTC offset is in hours. East is positive and west is negative.
 -   **Location**: Latitude and Longitude must be set for proper operation of the driver upon connection. The longitude range is 0 to 360 degrees increasing eastward from Greenwich.
--   Firmware: (read only) display of the internal firmware of the mount.
--   AP sidereal time: (read only) display of the sidereal time, as computed by the AP mount.
--   AP UTC Offset: (read only) display of the internal UTC offset value. Note this will not be negative.
+-   **Parking**: By default, the parking position is when the OTA to be looking directly at the celestial pole. To restore parking position to the default value, please Default under Park option. You can set a custom parking position using two methods. The mount must be unparked before you can set a new position:
+    -   Enter the desired HA & DE encoder values for the custom parking position, then press Set and then press Write Data to save the new parking position.
+    -   Slew the mount to the desired parking position, then press Current to sync the encoders position to this value, and then Write Data to save.
 
-### Guide
+You can park the telescope by clicking on Park. If the telescope is already parked, click the park button to unpark it. You cannot perform any motion unless the telescope is first unparked!
 
-![options](./images/thumb_options.webp)
+If you are using KStars as your INDI client, you can click on any object or location on the Sky Map and then set it as the desired parking position as illustrated below:
 
-Guide related option:
+![Site Management](./images/kstars_set_custom_park.webp)
 
--   **Guide N/S/W/E**: Guiding pulses durations in milliseconds. This property is meant for guider application (e.g. PHD2) and not intended to be used directly.
--   **Guide Rate**: Guiding Rate for RA & DE. Example: 0.25 means the mount shall move at 25% of the sidereal rate when the pulse is active. The sideral rate is ~15.04 arcseconds per second. So at 0.25x, the mount shall move 0.25*15.04 = 3.76 arcsecond per second. When receving a pulse for 1000ms, the total theoritical motion 3.76 arcseconds. The recommended value is 1.0x.
+### Alignment
+
+The mount model utilized by the driver is managed by the properties in the alignment tab. Each time a sync point is added (by Plate solving software for example), the  _Current Set_  size is incremented by one. To save the list to disk so that it can be utilized in a future session, click on the  **Action to take**  dropdown and select  _Save the alignment database to local storage_  then press  **OK**  next to  _Execute Action_  property. For best results, change the  **Math Plugins**  to use the  _Nearest Math Plugin_  since it is very simple and reliable when used with plate-sovling software. For more complicated modelling, select  _SVG Math Plugin_
+
+![Alignment](./images/alignment.webp)
