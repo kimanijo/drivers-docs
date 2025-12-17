@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: Avalon StarGo
+categories: ["mounts"]
+manufacturer_name: Avalon Instruments
+
+# Additional Metadata
+executable: indi_lx200stargo
+platforms: Linux, BSD, MacOS
+author: Wolfgang Reissenberger
+version: 1.7
+
+

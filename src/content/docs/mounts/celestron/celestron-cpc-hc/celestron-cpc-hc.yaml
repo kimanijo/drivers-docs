@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: Celestron GPS
+categories: ["mounts"]
+manufacturer_name: Celestron
+
+# Additional Metadata
+website: www.celestron.com
+executable: indi__celestron_gps
+version: 3.6
+
