@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: Losmandy
+categories: ["mounts"]
+manufacturer_name: Losmandy
+
+# Additional Metadata
+Website: www.losmandy.com
+executable: indi_lx200gemini
+platforms: Linux, BSD, OSX
+author: Jasem Mutlaq
+version: 1.5
+

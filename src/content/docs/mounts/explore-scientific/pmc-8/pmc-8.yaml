@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: Explore Scientific PMC-Eight
+categories: ["mounts"]
+manufacturer_name: Explore Scientific
+
+# Additional Metadata
+executable: indi_pmc8_telescope
+Platforms: Linux, BSD, OSX
+Author: Michael Fulbright, Karl Rees
+version: 0.4
+

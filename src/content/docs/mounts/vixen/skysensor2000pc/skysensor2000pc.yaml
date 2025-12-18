@@ -1,0 +1,11 @@
+# Display Names (Human-Friendly)
+driver_name: SkySensor2000PC
+categories: ["mounts"]
+manufacturer_name: Vixen
+
+# Additional Metadata
+executable: indi_lx200ss2000pc
+platforms: Linux, BSD, OSX
+author: Camiel Severijns
+version: 1.0
+

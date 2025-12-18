@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: Planewave
+categories: ["mounts"]
+manufacturer_name: Planewave Instruments
+
+# Additional Metadata
+executable: indi_planewave_telescope
+version: 0.1
+

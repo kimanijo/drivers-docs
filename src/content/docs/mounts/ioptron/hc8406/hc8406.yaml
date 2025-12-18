@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: iOptron HC8406
+categories: ["mounts"]
+manufacturer_name: iOptron
+
+# Additional Metadata
+executable: indi_ioptronHC8406
+version: 1.7
+

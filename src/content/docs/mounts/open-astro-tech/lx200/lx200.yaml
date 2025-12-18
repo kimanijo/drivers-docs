@@ -1,0 +1,12 @@
+# Display Names (Human-Friendly)
+driver_name: LX200 OpenAstroTech
+categories: ["mounts"]
+manufacturer_name: OpenAstroTech
+
+# Additional Metadata
+executable: indi_lx200_OpenAstroTech
+Platforms: Linux, BSD, OSX
+Author: Anjo Krank
+version: 0.9
+
+

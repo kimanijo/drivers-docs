@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: BRESSER Messier EXOS-2 EQ GoTo
+categories: ["mounts"]
+manufacturer_name: BRESSER
+
+# Additional Metadata
+executable: indi_lx200stargo
+version: 0.901
+
+

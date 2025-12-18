@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: Star Adventurer 2i
+categories: ["mounts"]
+manufacturer_name: Sky Watcher
+
+# Additional Metadata
+executable: indi_staradventurer2i_telescope
+Version: 1.2
+

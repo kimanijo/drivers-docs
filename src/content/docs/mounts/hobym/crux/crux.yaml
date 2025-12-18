@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: CRUX TitanTCS
+categories: ["mounts"]
+manufacturer_name: HOBYM
+
+# Additional Metadata
+executable: indi_crux_mount
+version: 1.0
+
+

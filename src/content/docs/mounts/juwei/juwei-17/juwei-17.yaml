@@ -1,0 +1,9 @@
+# Display Names (Human-Friendly)
+driver_name: LX200 OnStep
+categories: ["mounts"]
+manufacturer_name: Juwei
+
+# Additional Metadata
+executable: indi_eq500x_telescope
+version: 1.24
+

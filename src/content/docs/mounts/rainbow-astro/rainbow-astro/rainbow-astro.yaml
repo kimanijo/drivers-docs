@@ -1,0 +1,10 @@
+# Display Names (Human-Friendly)
+driver_name: Rainbow
+categories: ["mounts"]
+manufacturer_name: Rainbow Astro
+
+# Additional Metadata
+executable: indi_rainbow_telescope
+Platforms: Linux, BSD, OSX
+version: 1.1
+
