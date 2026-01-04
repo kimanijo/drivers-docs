@@ -5,7 +5,7 @@ manufacturer_name: astromi.ch
 
 # Additional Metadata
 website: astromi.ch
-executable: mbox_weather
+executable: indi_mbox_weather
 platforms: Linux, MacOS, BSD
 author: Jasem Mutlaq
 version: 1.0
